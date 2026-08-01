@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Getgems NFT Cost Test</title>
+    <link rel="icon" href="./icon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="kicker">TON Mainnet</p>
+        <h1>Getgems 合集成本测试</h1>
+      </div>
+      <div id="ton-connect"></div>
+    </header>
+
+    <main class="shell">
+      <section class="notice">
+        <strong>最短流程</strong>
+        <span>填 NFT 信息，一键发布到 GitHub Pages，再粘 Getgems 合集地址，发 10 个测试成本。</span>
+      </section>
+
+      <section class="panel nft-info">
+        <div class="section-head">
+          <h2>1. 填 NFT 信息</h2>
+          <p>所有收件人都会收到同一张图、同一个名称和介绍。</p>
+        </div>
+
+        <div class="nft-grid">
+          <label class="upload-box" for="image-file">
+            <input id="image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" />
+            <img id="image-preview" alt="" />
+            <span>上传图片预览</span>
+          </label>
+
+          <div class="nft-fields">
+            <label>
+              <span>NFT 名称</span>
+              <input id="nft-name" value="USSSSS HOLD Service" maxlength="60" />
+            </label>
+            <label>
+              <span>介绍</span>
+              <textarea id="description" rows="4" maxlength="700">Telegram HOLD service advertising NFT. Contact: usssss. Please verify the account before any transaction.</textarea>
+            </label>
+            <label>
+              <span>图片文件名</span>
+              <input id="github-image" value="usssss-hold.jpg" />
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel publish-panel">
+        <div class="section-head">
+          <h2>2. 发布公开链接</h2>
+          <p>GitHub token 只在本地浏览器里临时使用，不会保存。仓库会创建为公开仓库。</p>
+        </div>
+
+        <div class="field-row">
+          <label>
+            <span>GitHub 用户名</span>
+            <input id="github-user" placeholder="例如 yourname" autocomplete="username" />
+          </label>
+          <label>
+            <span>仓库名</span>
+            <input id="github-repo" value="nft-airdrop-assets" />
+          </label>
+        </div>
+
+        <label>
+          <span>GitHub Token</span>
+          <input id="github-token" type="password" placeholder="只需要 repo / contents / pages 相关权限" autocomplete="off" />
+        </label>
+
+        <div class="actions">
+          <button type="button" id="publish-github">一键发布到 GitHub Pages</button>
+          <button class="secondary" type="button" id="download-metadata">只下载 ad.json</button>
+        </div>
+
+        <div class="publish-result" id="publish-result">发布后这里会显示图片链接和 ad.json 链接。</div>
+      </section>
+
+      <section class="panel compact">
+        <div class="section-head">
+          <h2>3. 发 10 个测试</h2>
+          <p>这里不会再改 NFT 内容；所有 NFT 默认使用上面发布的 ad.json。</p>
+        </div>
+
+        <label>
+          <span>Getgems Collection 地址</span>
+          <input id="collection" placeholder="粘贴 Getgems 合集地址，EQ... 或 UQ..." autocomplete="off" />
+        </label>
+
+        <div class="address-bar">
+          <label class="file-input">
+            <span>导入 10 个目标地址</span>
+            <input id="csv-file" type="file" accept=".csv,text/csv" />
+          </label>
+          <button class="secondary" id="load-sample" type="button">用 10 地址示例</button>
+        </div>
+
+        <label>
+          <span>目标地址列表</span>
+          <textarea id="addresses" rows="7" placeholder="每行一个 TON 地址。测试时只发送前 10 个有效地址。"></textarea>
+        </label>
+
+        <div class="stats" id="stats">
+          <span>有效地址 0</span>
+          <span>重复 0</span>
+          <span>本批 0</span>
+        </div>
+
+        <div class="cost-strip">
+          <div>
+            <span>本批数量</span>
+            <strong id="batch-count">0</strong>
+          </div>
+          <div>
+            <span>预计发送</span>
+            <strong id="total-ton">0 TON</strong>
+          </div>
+          <div>
+            <span>单个 NFT 余额</span>
+            <strong id="single-ton">0.010 TON</strong>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="build" type="button">生成测试交易</button>
+          <button id="send" type="button" disabled>打开 Tonkeeper</button>
+        </div>
+
+        <div class="summary" id="summary">
+          <div><span>状态</span><strong>等待检查</strong></div>
+          <div><span>预计发送</span><strong>0 TON</strong></div>
+          <div><span>item 余额</span><strong>0 TON</strong></div>
+          <div><span>交易</span><strong>未生成</strong></div>
+        </div>
+
+        <details class="advanced">
+          <summary>高级设置</summary>
+          <div class="field-row">
+            <label>
+              <span>起始 NFT index</span>
+              <input id="start-index" type="number" min="0" step="1" value="0" />
+            </label>
+            <label>
+              <span>每个 NFT 附带 TON</span>
+              <input id="item-ton" type="number" min="0.005" step="0.001" value="0.01" />
+            </label>
+            <label>
+              <span>每批数量</span>
+              <input id="batch-size" type="number" min="1" max="249" step="1" value="10" />
+            </label>
+            <label>
+              <span>额外手续费预留 TON</span>
+              <input id="fee-buffer" type="number" min="0.01" step="0.001" value="0.02" />
+            </label>
+          </div>
+          <textarea id="payload" rows="5" readonly placeholder="生成后这里会显示 payload。"></textarea>
+        </details>
+
+        <div class="preview" id="preview"></div>
+      </section>
+
+      <input id="message-ton" type="hidden" value="0.12" />
+      <input id="suffix-mode" type="hidden" value="same" />
+      <input id="same-suffix" type="hidden" value="ad.json" />
+      <input id="content-prefix" type="hidden" />
+      <input id="metadata-url" type="hidden" value="ad.json" />
+      <input id="github-folder" type="hidden" value="nft" />
+      <input id="image-url" type="hidden" />
+      <div id="github-result" hidden></div>
+      <button id="apply-github" type="button" hidden></button>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
