@@ -484,7 +484,6 @@ async function publishToGithub() {
     const toolUrl = `https://${owner}.github.io/${repo}/`;
     const publicManifestUrl = `${toolUrl}tonconnect-manifest.json`;
     localStorage.setItem("ton-airdrop-public-manifest", publicManifestUrl);
-    initTonConnect(publicManifestUrl);
     els.metadataUrl.value = metadataUrl;
     els.publishResult.innerHTML = `<strong>发布完成。</strong><br>请等 1-3 分钟后打开公开版工具：<br><a href="${toolUrl}" target="_blank" rel="noreferrer">${toolUrl}</a><br><br>图片：${imageUrl}<br>ad.json：${metadataUrl}<br>钱包 manifest：${publicManifestUrl}`;
   } catch (error) {
